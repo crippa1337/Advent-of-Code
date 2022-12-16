@@ -1,0 +1,3 @@
+[submodule "AoC2022"]
+	path = AoC2022
+	url = https://github.com/crippa1337/AoC2022

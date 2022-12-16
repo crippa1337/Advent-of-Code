@@ -7,7 +7,11 @@ fn main() {
     let instructions = fs::read_to_string("input").unwrap();
     let mut crate_map = init_map(crates);
     println!("Top crates before: {}", get_top_crates(&crate_map));
+    part1(&instructions, crate_map.clone());
+    part2(instructions, crate_map);
+}
 
+fn part1(instructions: &String, mut crate_map: HashMap<u32, Vec<char>>) {
     for line in instructions.lines() {
         let (move_amount, move_from, move_to) = parse_instruction(line);
         for _ in 0..move_amount {
@@ -17,8 +21,23 @@ fn main() {
             target_stack.push(top_crate)
         }
     }
+    println!("[PART 1]\nTop crates after: {}", get_top_crates(&crate_map))
+}
 
-    println!("Top crates after: {}", get_top_crates(&crate_map));
+fn part2(instructions: String, mut crate_map: HashMap<u32, Vec<char>>) {
+    for line in instructions.lines() {
+        let (move_amount, move_from, move_to) = parse_instruction(line);
+        let mut crate_vec: Vec<char> = vec![];
+        for _ in 0..move_amount {
+            let move_stack = crate_map.get_mut(&move_from).unwrap();
+            let top_crate = move_stack.pop().unwrap();
+            crate_vec.push(top_crate);
+        }
+        crate_vec.reverse();
+        let target_stack = crate_map.get_mut(&move_to).unwrap();
+        target_stack.append(&mut crate_vec);
+    }
+    println!("[PART 2]\nTop crates after: {}", get_top_crates(&crate_map));
 }
 
 fn init_map(file: String) -> HashMap<u32, Vec<char>> {

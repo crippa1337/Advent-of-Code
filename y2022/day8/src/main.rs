@@ -9,21 +9,19 @@ fn main() {
 }
 
 fn solution<const PART_1: bool>() {
-    let f = File::open("test_input").unwrap();
-    let amount_of_lines = BufReader::new(&f).lines().count();
-
-    let f = File::open("test_input").unwrap();
-    let r = BufReader::new(f);
-
     let mut visible_trees = 0;
 
-    for (idx, row) in r.lines().map(|r| r.unwrap()).enumerate() {
-        println!("row: {row}\nidx: {idx}");
+    let all_trees: Vec<Vec<char>> = BufReader::new(File::open("test_input").unwrap())
+        .lines()
+        .map(|r| r.unwrap().chars().collect())
+        .collect();
 
-        if idx == 0 || idx == amount_of_lines - 1 {
-            visible_trees += row.len();
-        }
-    }
+    // count the edges
+    let width = all_trees[0].len();
+    let height = all_trees.len();
+    visible_trees += width * 2 + height * 2 - 4;
+
+    //
 
     println!("{visible_trees}");
 }
